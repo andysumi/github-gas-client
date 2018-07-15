@@ -11,7 +11,20 @@
     }
 
     GithubClient.prototype.getSpecificIssue = function(issueNo) {
-      return this.fetch_('/repos/' + this.owner + '/' + this.repoName + '/issues/' + issueNo, {'method': 'get'});
+      return this.fetch_('/repos/' + this.owner + '/' + this.repo + '/issues/' + issueNo, {'method': 'get'});
+    };
+
+    GithubClient.prototype.fetch_ = function(endPoint, options) {
+      var url = this.apiUrl + endPoint;
+      var response = UrlFetchApp.fetch(url, {
+        'method': options.method,
+        'muteHttpExceptions': true,
+        'contentType': 'application/json; charset=utf-8',
+        'headers': this.headers,
+        'payload': JSON.stringify(options.payload) || {}
+      });
+
+      return JSON.parse(response.getContentText());
     };
 
     return GithubClient;
