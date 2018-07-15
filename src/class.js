@@ -27,6 +27,16 @@
       return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues', {'method': 'post', 'payload': params});
     };
 
+    GithubClient.prototype.editIssue = function(issueNo, options) {
+      var params = {};
+      if (options) {
+        for (var key in options) {
+          params[key] = options[key];
+        }
+      }
+      return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues/' + issueNo, {'method': 'patch', 'payload': params});
+    };
+
     GithubClient.prototype.fetch_ = function(endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {
