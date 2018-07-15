@@ -10,6 +10,10 @@
       if (!token) throw new Error('"token"は必須です');
     }
 
+    GithubClient.prototype.getSpecificIssue = function(issueNo) {
+      return this.fetch_('/repos/' + this.owner + '/' + this.repoName + '/issues/' + issueNo, {'method': 'get'});
+    };
+
     return GithubClient;
   })();
 
