@@ -14,6 +14,19 @@
       return this.fetch_('/repos/' + this.owner + '/' + this.repo + '/issues/' + issueNo, {'method': 'get'});
     };
 
+    GithubClient.prototype.createIssue = function(title, body, options) {
+      var params = {
+        'title': title,
+        'body': body
+      };
+      if (options) {
+        for (var key in options) {
+          params[key] = options[key];
+        }
+      }
+      return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues', {'method': 'post', 'payload': params});
+    };
+
     GithubClient.prototype.fetch_ = function(endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {
