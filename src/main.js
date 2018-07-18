@@ -48,7 +48,7 @@ function editIssue(issueNo, options) { // eslint-disable-line no-unused-vars
  * @param {Objet} options 【任意】オプション ※ドキュメント参照
  * @return {Object} 処理結果
  */
-function getUserRepositories(type) { // eslint-disable-line no-unused-vars
+function getUserRepositories(options) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
@@ -58,6 +58,6 @@ function getUserRepositories(type) { // eslint-disable-line no-unused-vars
  * @param {Objet} options 【任意】オプション ※ドキュメント参照
  * @return {Object} 処理結果
  */
-function getOrgRepositories(type) { // eslint-disable-line no-unused-vars
+function getOrgRepositories(options) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
