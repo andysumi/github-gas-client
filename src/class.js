@@ -37,6 +37,28 @@
       return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues/' + issueNo, {'method': 'patch', 'payload': params});
     };
 
+    GithubClient.prototype.getUserRepositories = function(options) {
+      var params = [];
+      if (options) {
+        for (var key in options) {
+          params.push(key + '=' + options[key]);
+        }
+        params = '?' + params.join('&');
+      }
+      return this.fetch_('/users/' + this.owner + '/repos' + params, {'method': 'get'});
+    };
+
+    GithubClient.prototype.getOrgRepositories = function(options) {
+      var params = [];
+      if (options) {
+        for (var key in options) {
+          params.push(key + '=' + options[key]);
+        }
+        params = '?' + params.join('&');
+      }
+      return this.fetch_('/orgs/' + this.owner + '/repos' + params, {'method': 'get'});
+    };
+
     GithubClient.prototype.fetch_ = function(endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {
