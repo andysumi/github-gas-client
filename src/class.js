@@ -3,7 +3,9 @@
 
     function GithubClient(token, owner, repo) {
       this.apiUrl = 'https://api.github.com';
-      this.headers = {'Authorization': 'token ' + token};
+      this.headers = {
+        Authorization : 'token ' + token
+      };
       this.owner = owner;
       this.repo = repo;
 
@@ -16,8 +18,8 @@
 
     GithubClient.prototype.createIssue = function(title, body, options) {
       var params = {
-        'title': title,
-        'body': body
+        title : title,
+        body  : body
       };
       if (options) {
         for (var key in options) {
@@ -62,14 +64,17 @@
     GithubClient.prototype.fetch_ = function(endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {
-        'method': options.method,
-        'muteHttpExceptions': true,
-        'contentType': 'application/json; charset=utf-8',
-        'headers': this.headers,
-        'payload': JSON.stringify(options.payload) || {}
+        method             : options.method,
+        muteHttpExceptions : true,
+        contentType        : 'application/json; charset=utf-8',
+        headers            : this.headers,
+        payload            : JSON.stringify(options.payload) || {}
       });
 
-      return JSON.parse(response.getContentText());
+      return {
+        status : response.getResponseCode(),
+        body   : response.getContentText()
+      };
     };
 
     return GithubClient;
