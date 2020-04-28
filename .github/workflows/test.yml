@@ -29,7 +29,7 @@ jobs:
       - uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: ${{ GITHUB_WORKFLOW }}
+          author_name: ${{ github.workflow }}
           username: Github Actions
           icon_emoji: ':github:'
           channel: '#github_notify'
