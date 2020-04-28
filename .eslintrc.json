@@ -7,11 +7,14 @@
     ],
     "parserOptions": {},
     "env": {
-       "googleappsscript/googleappsscript": true
+      "googleappsscript/googleappsscript": true
     },
-    "globals": {
-      "console": false,
-      "GithubClient": false
+    "globals": {// Google Apps Script
+      "console": true,
+      // External Libraries
+      "GasTap": true,
+      // Our classes
+      "GithubClient": true
     },
     "rules": {
       "semi": "warn",
