@@ -36,7 +36,7 @@ jobs:
           mention: here
           if_mention: failure,cancelled
           fields: repo, action
-          text: '<${ URL }/commit/${{ github.sha }}/checks|${{ job.status }}>: ${{ github.workflow }} Workflow executed by ${{ github.actor }} in <${ URL }|${{ github.repository }}>'
+          text: '<${URL}/commit/${{ github.sha }}/checks|${{ job.status }}>: ${{ github.workflow }} Workflow executed by ${{ github.actor }} in <${URL}|${{ github.repository }}>'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
