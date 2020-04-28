@@ -35,8 +35,8 @@ jobs:
           channel: '#github_notify'
           mention: here
           if_mention: failure,cancelled
-          fields: repo,message,author, action, workflow
-          text: 'hoge'
+          fields: repo,message,author, action
+          text: '${{ job.status }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
