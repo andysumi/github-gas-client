@@ -13,6 +13,7 @@ function TestRunner() { // eslint-disable-line no-unused-vars
     testGetSpecificIssue(test, common);
     testCreateIssue(test, common);
     testEditIssue(test, common);
+    testGetUserRepositories(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -83,5 +84,15 @@ function testEditIssue(test, common) {
     t.equal(JSON.parse(result.body).assignees[0].login, assign, '"asign"が正しいこと');
     t.equal(JSON.parse(result.body).labels[0].name, label, '"label"が正しいこと');
     t.equal(JSON.parse(result.body).state, state, '"state"が正しいこと');
+  });
+}
+
+function testGetUserRepositories(test, common) {
+  var client = common.getClient();
+
+  test('getUserRepositories() - 正常系', function (t) {
+    var result = client.getUserRepositories();
+    t.equal(result.status, 200, 'repositoryが取得できること');
+    t.equal(JSON.parse(result.body)[0].owner.login, common.owner, '"owner"が正しいこと');
   });
 }
