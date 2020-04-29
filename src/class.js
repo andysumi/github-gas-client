@@ -32,14 +32,11 @@
       return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues', {'method': 'post', 'payload': params});
     };
 
-    GithubClient.prototype.editIssue = function(issueNo, options) {
-      var params = {};
-      if (options) {
-        for (var key in options) {
-          params[key] = options[key];
-        }
-      }
-      return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues/' + issueNo, {'method': 'patch', 'payload': params});
+    GithubClient.prototype.editIssue = function (no, params) {
+      if (!no) throw new Error('"no"は必須です');
+      if (!params) throw new Error('"params"は必須です');
+
+      return this.fetch_(Utilities.formatString('/repos/%s/%s/issues/%s', this.owner, this.repo, no), { 'method': 'patch', 'payload': params });
     };
 
     GithubClient.prototype.getUserRepositories = function(options) {
