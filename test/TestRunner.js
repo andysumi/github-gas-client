@@ -128,9 +128,9 @@ function testGetUserRepositories(test, common) {
 
   test('getUserRepositories() - 正常系(optionあり)', function (t) {
     var result = client.getUserRepositories({
-      type: 'all',
-      sort: 'created',
-      direction: 'asc'
+      type      : 'all',
+      sort      : 'created',
+      direction : 'asc'
     });
     t.equal(result.status, 200, 'repositoryが取得できること');
   });
@@ -139,9 +139,18 @@ function testGetUserRepositories(test, common) {
 function testGetOrgRepositories(test, common) {
   var client = common.getClientOrg();
 
-  test('getOrgRepositories() - 正常系', function (t) {
+  test('getOrgRepositories() - 正常系(optionなし)', function (t) {
     var result = client.getOrgRepositories();
     t.equal(result.status, 200, 'repositoryが取得できること');
-    t.equal(JSON.parse(result.body)[0].owner.login, common.org, '"owner"が正しいこと');
+    t.equal(result.contents[0].owner.login, common.org, '"owner"が正しいこと');
+  });
+
+  test('getOrgRepositories() - 正常系(optionあり)', function (t) {
+    var result = client.getOrgRepositories({
+      type      : 'all',
+      sort      : 'created',
+      direction : 'asc'
+    });
+    t.equal(result.status, 200, 'repositoryが取得できること');
   });
 }

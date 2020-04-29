@@ -42,14 +42,7 @@
     };
 
     GithubClient.prototype.getOrgRepositories = function(options) {
-      var params = [];
-      if (options) {
-        for (var key in options) {
-          params.push(key + '=' + options[key]);
-        }
-        params = '?' + params.join('&');
-      }
-      return this.fetch_('/orgs/' + this.owner + '/repos' + params, {'method': 'get'});
+      return this.fetch_(Utilities.formatString('/orgs/%s/repos?%s', this.owner, this.buildUrlParam_(options)), { 'method': 'get' });
     };
 
     GithubClient.prototype.buildUrlParam_ = function (params) {
