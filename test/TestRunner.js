@@ -40,8 +40,15 @@ function testGetSpecificIssue(test, common) {
   test('getSpecificIssue() - 正常系', function (t) {
     var result = client.getSpecificIssue(no);
     t.equal(result.status, 200, 'issueが取得できること');
-    t.equal(JSON.parse(result.body).number, no, '"number"が正しいこと');
-    t.equal(JSON.parse(result.body).url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, no), '"url"が正しいこと');
+    t.equal(result.contents.number, no, '"number"が正しいこと');
+    t.equal(result.contents.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, no), '"url"が正しいこと');
+  });
+
+  test('getSpecificIssue() - 異常系', function (t) {
+    t.throws(function () {
+      return client.getSpecificIssue();
+    },
+    '"no"を指定していない場合はエラー');
   });
 }
 

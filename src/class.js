@@ -10,10 +10,13 @@
       this.repo = repo;
 
       if (!token) throw new Error('"token"は必須です');
+      if (!owner) throw new Error('"owner"は必須です');
     }
 
-    GithubClient.prototype.getSpecificIssue = function(issueNo) {
-      return this.fetch_('/repos/' + this.owner + '/' + this.repo + '/issues/' + issueNo, {'method': 'get'});
+    GithubClient.prototype.getSpecificIssue = function (no) {
+      if (!no) throw new Error('"no"は必須です');
+
+      return this.fetch_(Utilities.formatString('/repos/%s/%s/issues/%s', this.owner, this.repo, no), { 'method': 'get' });
     };
 
     GithubClient.prototype.createIssue = function(title, body, options) {
@@ -71,9 +74,16 @@
         payload            : JSON.stringify(options.payload) || {}
       });
 
+      var contents;
+      try {
+        contents = JSON.parse(response.getContentText('utf-8'));
+      } catch (err) {
+        contents = response.getContentText('utf-8');
+      }
+
       return {
-        status : response.getResponseCode(),
-        body   : response.getContentText()
+        status   : response.getResponseCode(),
+        contents : contents
       };
     };
 
