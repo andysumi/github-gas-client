@@ -1,5 +1,6 @@
 (function(global) {
   var GithubClient = (function() {
+    var _ = Underscore.load();
 
     function GithubClient(token, owner, repo) {
       this.apiUrl = 'https://api.github.com';
@@ -19,17 +20,14 @@
       return this.fetch_(Utilities.formatString('/repos/%s/%s/issues/%s', this.owner, this.repo, no), { 'method': 'get' });
     };
 
-    GithubClient.prototype.createIssue = function(title, body, options) {
-      var params = {
-        title : title,
-        body  : body
-      };
-      if (options) {
-        for (var key in options) {
-          params[key] = options[key];
-        }
-      }
-      return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues', {'method': 'post', 'payload': params});
+    GithubClient.prototype.createIssue = function (title, body, options) {
+      if (!title) throw new Error('"title"は必須です');
+      if (!body) throw new Error('"body"は必須です');
+
+      return this.fetch_(Utilities.formatString('/repos/%s/%s/issues', this.owner, this.repo), { 'method': 'post', 'payload': _.extend({
+        title: title,
+        body: body
+      }, options) });
     };
 
     GithubClient.prototype.editIssue = function (no, params) {

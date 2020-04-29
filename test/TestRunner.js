@@ -60,11 +60,22 @@ function testCreateIssue(test, common) {
   test('createIssue() - 正常系', function (t) {
     var result = client.createIssue(title, body);
     t.equal(result.status, 201, 'issueが作成できること');
-    t.equal(JSON.parse(result.body).url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, JSON.parse(result.body).number), '"url"が正しいこと');
-    t.equal(JSON.parse(result.body).title, title, '"title"が正しいこと');
-    t.equal(JSON.parse(result.body).body, body, '"body"が正しいこと');
+    t.equal(result.contents.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, result.contents.number), '"url"が正しいこと');
+    t.equal(result.contents.title, title, '"title"が正しいこと');
+    t.equal(result.contents.body, body, '"body"が正しいこと');
 
-    common.no = JSON.parse(result.body).number;
+    common.no = result.contents.number;
+  });
+
+  test('createIssue() - 異常系', function (t) {
+    t.throws(function () {
+      return client.createIssue();
+    },
+    '"title"を指定していない場合はエラー');
+    t.throws(function () {
+      return client.createIssue(title);
+    },
+    '"body"を指定していない場合はエラー');
   });
 }
 

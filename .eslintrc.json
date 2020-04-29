@@ -12,6 +12,7 @@
     "globals": {// Google Apps Script
       "console": true,
       // External Libraries
+      "Underscore": true,
       "GasTap": true,
       // Our classes
       "GithubClient": true
