@@ -120,10 +120,19 @@ function testEditIssue(test, common) {
 function testGetUserRepositories(test, common) {
   var client = common.getClientUser();
 
-  test('getUserRepositories() - 正常系', function (t) {
+  test('getUserRepositories() - 正常系(optionなし)', function (t) {
     var result = client.getUserRepositories();
     t.equal(result.status, 200, 'repositoryが取得できること');
-    t.equal(JSON.parse(result.body)[0].owner.login, common.user, '"owner"が正しいこと');
+    t.equal(result.contents[0].owner.login, common.user, '"owner"が正しいこと');
+  });
+
+  test('getUserRepositories() - 正常系(optionあり)', function (t) {
+    var result = client.getUserRepositories({
+      type: 'all',
+      sort: 'created',
+      direction: 'asc'
+    });
+    t.equal(result.status, 200, 'repositoryが取得できること');
   });
 }
 

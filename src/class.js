@@ -38,14 +38,7 @@
     };
 
     GithubClient.prototype.getUserRepositories = function(options) {
-      var params = [];
-      if (options) {
-        for (var key in options) {
-          params.push(key + '=' + options[key]);
-        }
-        params = '?' + params.join('&');
-      }
-      return this.fetch_('/users/' + this.owner + '/repos' + params, {'method': 'get'});
+      return this.fetch_(Utilities.formatString('/users/%s/repos?%s', this.owner, this.buildUrlParam_(options)), { 'method': 'get' });
     };
 
     GithubClient.prototype.getOrgRepositories = function(options) {
@@ -57,6 +50,16 @@
         params = '?' + params.join('&');
       }
       return this.fetch_('/orgs/' + this.owner + '/repos' + params, {'method': 'get'});
+    };
+
+    GithubClient.prototype.buildUrlParam_ = function (params) {
+      if (!params) return '';
+
+      var temp = [];
+      for (var key in params) {
+        temp.push(Utilities.formatString('%s=%s', key, encodeURIComponent(params[key])));
+      }
+      return temp.join('&');
     };
 
     GithubClient.prototype.fetch_ = function(endPoint, options) {
