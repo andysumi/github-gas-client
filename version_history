@@ -1,3 +1,4 @@
 1 - getSpecificIssue、createIssue及びeditIssueを追加
 2 - getUserRepositories及びgetOrgRepositoriesを追加
 3 - レスポンスにstatusを追加
+4 - リファクタリング
