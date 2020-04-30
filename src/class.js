@@ -1,5 +1,6 @@
 (function(global) {
   var GithubClient = (function() {
+    var _ = Underscore.load();
 
     function GithubClient(token, owner, repo) {
       this.apiUrl = 'https://api.github.com';
@@ -10,55 +11,48 @@
       this.repo = repo;
 
       if (!token) throw new Error('"token"は必須です');
+      if (!owner) throw new Error('"owner"は必須です');
     }
 
-    GithubClient.prototype.getSpecificIssue = function(issueNo) {
-      return this.fetch_('/repos/' + this.owner + '/' + this.repo + '/issues/' + issueNo, {'method': 'get'});
+    GithubClient.prototype.getSpecificIssue = function (no) {
+      if (!no) throw new Error('"no"は必須です');
+
+      return this.fetch_(Utilities.formatString('/repos/%s/%s/issues/%s', this.owner, this.repo, no), { 'method': 'get' });
     };
 
-    GithubClient.prototype.createIssue = function(title, body, options) {
-      var params = {
-        title : title,
-        body  : body
-      };
-      if (options) {
-        for (var key in options) {
-          params[key] = options[key];
-        }
-      }
-      return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues', {'method': 'post', 'payload': params});
+    GithubClient.prototype.createIssue = function (title, body, options) {
+      if (!title) throw new Error('"title"は必須です');
+      if (!body) throw new Error('"body"は必須です');
+
+      return this.fetch_(Utilities.formatString('/repos/%s/%s/issues', this.owner, this.repo), { 'method': 'post', 'payload': _.extend({
+        title: title,
+        body: body
+      }, options) });
     };
 
-    GithubClient.prototype.editIssue = function(issueNo, options) {
-      var params = {};
-      if (options) {
-        for (var key in options) {
-          params[key] = options[key];
-        }
-      }
-      return this.fetch_('/repos/' + this.owner + '/' + this.repo +'/issues/' + issueNo, {'method': 'patch', 'payload': params});
+    GithubClient.prototype.editIssue = function (no, params) {
+      if (!no) throw new Error('"no"は必須です');
+      if (!params) throw new Error('"params"は必須です');
+
+      return this.fetch_(Utilities.formatString('/repos/%s/%s/issues/%s', this.owner, this.repo, no), { 'method': 'patch', 'payload': params });
     };
 
     GithubClient.prototype.getUserRepositories = function(options) {
-      var params = [];
-      if (options) {
-        for (var key in options) {
-          params.push(key + '=' + options[key]);
-        }
-        params = '?' + params.join('&');
-      }
-      return this.fetch_('/users/' + this.owner + '/repos' + params, {'method': 'get'});
+      return this.fetch_(Utilities.formatString('/users/%s/repos?%s', this.owner, this.buildUrlParam_(options)), { 'method': 'get' });
     };
 
     GithubClient.prototype.getOrgRepositories = function(options) {
-      var params = [];
-      if (options) {
-        for (var key in options) {
-          params.push(key + '=' + options[key]);
-        }
-        params = '?' + params.join('&');
+      return this.fetch_(Utilities.formatString('/orgs/%s/repos?%s', this.owner, this.buildUrlParam_(options)), { 'method': 'get' });
+    };
+
+    GithubClient.prototype.buildUrlParam_ = function (params) {
+      if (!params) return '';
+
+      var temp = [];
+      for (var key in params) {
+        temp.push(Utilities.formatString('%s=%s', key, encodeURIComponent(params[key])));
       }
-      return this.fetch_('/orgs/' + this.owner + '/repos' + params, {'method': 'get'});
+      return temp.join('&');
     };
 
     GithubClient.prototype.fetch_ = function(endPoint, options) {
@@ -71,10 +65,11 @@
         payload            : JSON.stringify(options.payload) || {}
       });
 
-      return {
-        status : response.getResponseCode(),
-        body   : response.getContentText()
-      };
+      try {
+        return JSON.parse(response.getContentText('utf-8'));
+      } catch (err) {
+        return response.getContentText('utf-8');
+      }
     };
 
     return GithubClient;
