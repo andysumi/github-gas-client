@@ -39,9 +39,9 @@ function testGetSpecificIssue(test, common) {
 
   test('getSpecificIssue() - 正常系', function (t) {
     var result = client.getSpecificIssue(no);
-    t.equal(result.status, 200, 'issueが取得できること');
-    t.equal(result.contents.number, no, '"number"が正しいこと');
-    t.equal(result.contents.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, no), '"url"が正しいこと');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.number, no, '"number"が正しいこと');
+    t.equal(result.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, no), '"url"が正しいこと');
   });
 
   test('getSpecificIssue() - 異常系', function (t) {
@@ -59,12 +59,12 @@ function testCreateIssue(test, common) {
 
   test('createIssue() - 正常系', function (t) {
     var result = client.createIssue(title, body);
-    t.equal(result.status, 201, 'issueが作成できること');
-    t.equal(result.contents.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, result.contents.number), '"url"が正しいこと');
-    t.equal(result.contents.title, title, '"title"が正しいこと');
-    t.equal(result.contents.body, body, '"body"が正しいこと');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, result.number), '"url"が正しいこと');
+    t.equal(result.title, title, '"title"が正しいこと');
+    t.equal(result.body, body, '"body"が正しいこと');
 
-    common.no = result.contents.number;
+    common.no = result.number;
   });
 
   test('createIssue() - 異常系', function (t) {
@@ -96,13 +96,13 @@ function testEditIssue(test, common) {
       labels: [label],
       state: state
     });
-    t.equal(result.status, 200, 'issueが編集できること');
-    t.equal(result.contents.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, result.contents.number), '"url"が正しいこと');
-    t.equal(result.contents.title, title, '"title"が正しいこと');
-    t.equal(result.contents.body, body, '"body"が正しいこと');
-    t.equal(result.contents.assignees[0].login, assign, '"asign"が正しいこと');
-    t.equal(result.contents.labels[0].name, label, '"label"が正しいこと');
-    t.equal(result.contents.state, state, '"state"が正しいこと');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.url, Utilities.formatString('https://api.github.com/repos/%s/%s/issues/%s', common.user, common.repo, result.number), '"url"が正しいこと');
+    t.equal(result.title, title, '"title"が正しいこと');
+    t.equal(result.body, body, '"body"が正しいこと');
+    t.equal(result.assignees[0].login, assign, '"asign"が正しいこと');
+    t.equal(result.labels[0].name, label, '"label"が正しいこと');
+    t.equal(result.state, state, '"state"が正しいこと');
   });
 
   test('editIssue() - 異常系', function (t) {
@@ -122,8 +122,8 @@ function testGetUserRepositories(test, common) {
 
   test('getUserRepositories() - 正常系(optionなし)', function (t) {
     var result = client.getUserRepositories();
-    t.equal(result.status, 200, 'repositoryが取得できること');
-    t.equal(result.contents[0].owner.login, common.user, '"owner"が正しいこと');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result[0].owner.login, common.user, '"owner"が正しいこと');
   });
 
   test('getUserRepositories() - 正常系(optionあり)', function (t) {
@@ -132,7 +132,8 @@ function testGetUserRepositories(test, common) {
       sort      : 'created',
       direction : 'asc'
     });
-    t.equal(result.status, 200, 'repositoryが取得できること');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result[0], 'id'), '"id"を含むこと');
   });
 }
 
@@ -141,8 +142,8 @@ function testGetOrgRepositories(test, common) {
 
   test('getOrgRepositories() - 正常系(optionなし)', function (t) {
     var result = client.getOrgRepositories();
-    t.equal(result.status, 200, 'repositoryが取得できること');
-    t.equal(result.contents[0].owner.login, common.org, '"owner"が正しいこと');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result[0].owner.login, common.org, '"owner"が正しいこと');
   });
 
   test('getOrgRepositories() - 正常系(optionあり)', function (t) {
@@ -151,6 +152,7 @@ function testGetOrgRepositories(test, common) {
       sort      : 'created',
       direction : 'asc'
     });
-    t.equal(result.status, 200, 'repositoryが取得できること');
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result[0], 'id'), '"id"を含むこと');
   });
 }

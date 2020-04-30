@@ -65,17 +65,11 @@
         payload            : JSON.stringify(options.payload) || {}
       });
 
-      var contents;
       try {
-        contents = JSON.parse(response.getContentText('utf-8'));
+        return JSON.parse(response.getContentText('utf-8'));
       } catch (err) {
-        contents = response.getContentText('utf-8');
+        return response.getContentText('utf-8');
       }
-
-      return {
-        status   : response.getResponseCode(),
-        contents : contents
-      };
     };
 
     return GithubClient;
